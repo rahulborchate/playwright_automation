@@ -6,7 +6,6 @@ const month ="May";
 const year ="2024";
 
 page.goto("https://rahulshettyacademy.com/seleniumPractise/#/offers");
-
 await page.locator("div.react-date-picker__inputGroup").click();
 await page.locator(".react-calendar__navigation__label").click();
 await page.locator(".react-calendar__navigation__label").click();
