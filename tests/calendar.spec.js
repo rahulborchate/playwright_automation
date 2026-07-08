@@ -18,5 +18,4 @@ test("Calendar Test", async ({ page }) => {
 
 
     await expect(selectedDate).toBe("" + year + "-" + "05" + "-" + day);
-    // await page.pause(1000);
 });

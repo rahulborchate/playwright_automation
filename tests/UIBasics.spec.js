@@ -12,9 +12,6 @@ test('First Playwright Test', async ({ page }) => {
   //Navigate to the URL   
   await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
 
-  //Take a screenshot of the page and save it as screenshot.png
-  await page.screenshot({ path: 'screenshot.png' });
-
   //Print the title of the page in console
   console.log(await page.title());
 
