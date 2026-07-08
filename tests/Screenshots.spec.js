@@ -16,3 +16,8 @@ test('Test page and locator based screenshots', async ({ page }) => {
 
     await page.locator('#show-textbox').click();
 });
+
+test.only('Visual testing - Verify screenshots', async ({ page }) => {
+    await page.goto('https://www.google.com');
+    expect(await page.screenshot()).toMatchSnapshot('google-homepage.png');
+});
