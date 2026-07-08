@@ -1,13 +1,12 @@
-const {test, expect}= require('@playwright/test');
+const { test, expect } = require('@playwright/test');
 
-test('First Playwright Test', async ({page}) => 
-    { 
+test('First Playwright Test', async ({ page }) => {
     //Locators
     const products = page.locator('.card-body');
     const userName = page.getByPlaceholder("email@example.com");
     const password = page.getByPlaceholder("enter your passsword");
     const signInButton = page.getByRole('button', { name: 'Login' });
-    const lofinButton= page.getByRole('button', { name: 'Login' });
+    const lofinButton = page.getByRole('button', { name: 'Login' });
     const cardTitles = page.locator('.card-body b');
     const itemList = page.locator('div.cart li');
     const cartButton = page.locator('[routerlink*="cart"]');
@@ -44,31 +43,30 @@ test('First Playwright Test', async ({page}) =>
     await creditCardInput.first().fill("1234 5678 9012 3456");
     await creditCardInput.nth(1).fill("123");
     await creditCardInput.nth(2).fill("Rahul Borchate");
-    await page.locator("[placeholder='Select Country']").pressSequentially('Ind', {delay:200});
+    await page.locator("[placeholder='Select Country']").pressSequentially('Ind', { delay: 200 });
     await page.getByRole('button', { name: 'India' }).nth(1).click();
 
-        expect(await userLabel.textContent()).toContain("rahulborchate11@gmail.com");
-        await placeOrderButton.click();
+    expect(await userLabel.textContent()).toContain("rahulborchate11@gmail.com");
+    await placeOrderButton.click();
 
-        await thankYouMessage.waitFor();
-        expect(await thankYouMessage.textContent()).toContain(" Thankyou for the order. ");
-        const orderIdText = await orderId.textContent();
-        console.log("Order ID: " + orderIdText);
-        await myOrdersHistoryLink.click();
-        await page.locator("tbody tr").first().waitFor();
-        const orderRows = page.locator("tbody tr");
-        const orderRowsCount = await orderRows.count();
-        console.log("Order Rows Count: " + orderRowsCount);
-         for(let i=0; i<orderRowsCount; i++){
-            const rowOrderId = await orderRows.nth(i).locator("th").nth(0).textContent();
-            console.log("Row Order ID: " + rowOrderId);
-            if(orderIdText.includes(rowOrderId)){
-                await orderRows.nth(i).locator("button").first().click();
-                break;
-            }
+    await thankYouMessage.waitFor();
+    expect(await thankYouMessage.textContent()).toContain(" Thankyou for the order. ");
+    const orderIdText = await orderId.textContent();
+    console.log("Order ID: " + orderIdText);
+    await myOrdersHistoryLink.click();
+    await page.locator("tbody tr").first().waitFor();
+    const orderRows = page.locator("tbody tr");
+    const orderRowsCount = await orderRows.count();
+    console.log("Order Rows Count: " + orderRowsCount);
+    for (let i = 0; i < orderRowsCount; i++) {
+        const rowOrderId = await orderRows.nth(i).locator("th").nth(0).textContent();
+        console.log("Row Order ID: " + rowOrderId);
+        if (orderIdText.includes(rowOrderId)) {
+            await orderRows.nth(i).locator("button").first().click();
+            break;
+        }
     }
     const orderSummaryOrderId = await page.locator("div.email-container .-main").textContent();
     expect(await orderIdText.includes(orderSummaryOrderId));
     // await page.pause(100);
 });
-    

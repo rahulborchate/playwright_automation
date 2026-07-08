@@ -3,6 +3,7 @@ const { APIUtils } = require('./utils/APIUtils');
 
 const loginPayload = { userEmail: "rahulborchate11@gmail.com", userPassword: "Aloha@123" };
 const orderPayload = { orders: [{ country: "India", productOrderedId: "6960eac0c941646b7a8b3e68" }] };
+const fakePlayloadNoOrders = { data: [], message: "No Orders" };
 let response;
 
 test.beforeAll(async () => {
@@ -11,7 +12,7 @@ test.beforeAll(async () => {
     response = await apiUtils.createOrder(orderPayload);
 });
 
-test('Place the order', async ({ page }) => {
+test('Test mock API response', async ({ page }) => {
     //Locators
     const myOrdersHistoryLink = page.getByRole('button', { name: 'ORDERS' });
 
@@ -23,22 +24,21 @@ test('Place the order', async ({ page }) => {
     //Go to the page
     await page.goto('https://rahulshettyacademy.com/client/');
 
+    //Mock API response: API actual response-> mock playwirght fake response -> browser->render data on UI using fake response
+
+    await page.route("https://rahulshettyacademy.com/api/ecom/order/get-orders-for-customer/*",
+        async route => {
+            const response = await page.request.fetch(route.request());
+            let body = JSON.stringify(fakePlayloadNoOrders);
+            route.fulfill({
+                response,
+                body
+            })
+        })
+
     //Click on the Orders link
     await myOrdersHistoryLink.click();
-    await page.locator("tbody tr").first().waitFor();
-    const orderRows = page.locator("tbody tr");
-    const orderRowsCount = await orderRows.count();
-    console.log("Order Rows Count: " + orderRowsCount);
-
-    for (let i = 0; i < orderRowsCount; i++) {
-        const rowOrderId = await orderRows.nth(i).locator("th").nth(0).textContent();
-        console.log("Row Order ID: " + rowOrderId);
-        if (response.orderId === rowOrderId) {
-            await orderRows.nth(i).locator("button").first().click();
-            break;
-        }
-    }
-    const orderSummaryOrderId = await page.locator("div.email-container .-main").textContent();
-    expect(await response.orderId.includes(orderSummaryOrderId));
-    await page.pause(100);
+    page.waitForResponse("https://rahulshettyacademy.com/api/ecom/order/get-orders-for-customer/*");
+    await page.locator('.mt-4').isVisible();
+    console.log(await page.locator('.mt-4').textContent());
 });

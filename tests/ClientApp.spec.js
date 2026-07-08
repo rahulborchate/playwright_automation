@@ -1,13 +1,12 @@
-const {test, expect}= require('@playwright/test');
+const { test, expect } = require('@playwright/test');
 
-test('First Playwright Test', async ({page}) => 
-    { 
+test('First Playwright Test', async ({ page }) => {
     //Locators
     const products = page.locator('.card-body');
     const userName = page.locator('#userEmail');
     const password = page.locator('#userPassword');
     const signInButton = page.getByRole('button', { name: 'Login' });
-    const lofinButton= page.getByRole('button', { name: 'Login' });
+    const lofinButton = page.getByRole('button', { name: 'Login' });
     const cardTitles = page.locator('.card-body b');
     const itemList = page.locator('div.cart li');
     const cartButton = page.locator('[routerlink*="cart"]');
@@ -38,8 +37,8 @@ test('First Playwright Test', async ({page}) =>
 
     console.log(await cardTitles.allTextContents());
     const count = await products.count();
-    for(let i=0; i<count; i++){
-        if(await products.nth(i).locator('b').textContent() === 'ZARA COAT 3'){
+    for (let i = 0; i < count; i++) {
+        if (await products.nth(i).locator('b').textContent() === 'ZARA COAT 3') {
             await products.nth(i).locator('text=Add To Cart').click();
             break;
         }
@@ -53,39 +52,38 @@ test('First Playwright Test', async ({page}) =>
     await creditCardInput.first().fill("1234 5678 9012 3456");
     await creditCardInput.nth(1).fill("123");
     await creditCardInput.nth(2).fill("Rahul Borchate");
-    await countryInput.type('Ind', {delay:200});
+    await countryInput.type('Ind', { delay: 200 });
     await page.locator("section.ta-results button").first().waitFor();
     const dropdownValues = page.locator("section.ta-results button");
     const dropdownCount = await dropdownValues.count();
-    for(let i=0; i<dropdownCount; i++){
-            const text = await dropdownValues.nth(i).textContent();
-            if(text.trim() === "India"){
-                await dropdownValues.nth(i).click();
-                break;
-            }
+    for (let i = 0; i < dropdownCount; i++) {
+        const text = await dropdownValues.nth(i).textContent();
+        if (text.trim() === "India") {
+            await dropdownValues.nth(i).click();
+            break;
         }
-        expect(await userLabel.textContent()).toContain("rahulborchate11@gmail.com");
-        await placeOrderButton.click();
+    }
+    expect(await userLabel.textContent()).toContain("rahulborchate11@gmail.com");
+    await placeOrderButton.click();
 
-        await thankYouMessage.waitFor();
-        expect(await thankYouMessage.textContent()).toContain(" Thankyou for the order. ");
-        const orderIdText = await orderId.textContent();
-        console.log("Order ID: " + orderIdText);
-        await myOrdersHistoryLink.click();
-        await page.locator("tbody tr").first().waitFor();
-        const orderRows = page.locator("tbody tr");
-        const orderRowsCount = await orderRows.count();
-        console.log("Order Rows Count: " + orderRowsCount);
-         for(let i=0; i<orderRowsCount; i++){
-            const rowOrderId = await orderRows.nth(i).locator("th").nth(0).textContent();
-            console.log("Row Order ID: " + rowOrderId);
-            if(orderIdText.includes(rowOrderId)){
-                await orderRows.nth(i).locator("button").first().click();
-                break;
-            }
+    await thankYouMessage.waitFor();
+    expect(await thankYouMessage.textContent()).toContain(" Thankyou for the order. ");
+    const orderIdText = await orderId.textContent();
+    console.log("Order ID: " + orderIdText);
+    await myOrdersHistoryLink.click();
+    await page.locator("tbody tr").first().waitFor();
+    const orderRows = page.locator("tbody tr");
+    const orderRowsCount = await orderRows.count();
+    console.log("Order Rows Count: " + orderRowsCount);
+    for (let i = 0; i < orderRowsCount; i++) {
+        const rowOrderId = await orderRows.nth(i).locator("th").nth(0).textContent();
+        console.log("Row Order ID: " + rowOrderId);
+        if (orderIdText.includes(rowOrderId)) {
+            await orderRows.nth(i).locator("button").first().click();
+            break;
+        }
     }
     const orderSummaryOrderId = await page.locator("div.email-container .-main").textContent();
     expect(await orderIdText.includes(orderSummaryOrderId));
     // await page.pause(100);
 });
-    

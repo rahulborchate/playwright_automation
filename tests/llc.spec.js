@@ -1,6 +1,6 @@
-    const {test, expect}= require('@playwright/test');
-    
-    test('Special locator Playwright Test', async ({page}) =>{
+const { test, expect } = require('@playwright/test');
+
+test('Special locator Playwright Test', async ({ page }) => {
 
     await page.goto('https://rahulshettyacademy.com/angularpractice/');
     await page.locator('form input[name="name"]').fill("Rahul Borchate");
@@ -14,4 +14,4 @@
     await page.locator('app-card').filter({ hasText: 'Nokia Edge' }).getByRole('button', { name: 'Add' }).click();
     // await page.pause(10000);
 
-    });
+});
