@@ -40,5 +40,4 @@ test('Place the order', async ({ page }) => {
     }
     const orderSummaryOrderId = await page.locator("div.email-container .-main").textContent();
     expect(await response.orderId.includes(orderSummaryOrderId));
-    await page.pause(100);
 });
